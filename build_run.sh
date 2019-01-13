@@ -1,8 +1,14 @@
 #!/bin/sh
 #
+# Run the cron job:
+# - write in the cron log
+# - build the Docker image
+# - mount a volume, then run the Docker image
+#
+# Call this script in the /etc/crontab.
 
-# Path to this script
-PATH_SCRIPT=`dirname "$0"`
+# Get the absolute path to this script
+PATH_SCRIPT=$(dirname $(realpath -s $0))
 
 LOGGER_NAME="cron-docker-job"
 
@@ -17,4 +23,3 @@ logger -i -t "$LOGGER_NAME" "Ran cron script."
 
 docker build -q -t "$DOCKER_IMAGE_NAME" .
 docker run -it --rm -v "$DOCKER_VOLUME_PATH_HOST:$DOCKER_VOLUME_PATH_CONTAINER" "$DOCKER_IMAGE_NAME"
-
